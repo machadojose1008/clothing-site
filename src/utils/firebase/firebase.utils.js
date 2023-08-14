@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -10,10 +11,10 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-
-
-
 const app = initializeApp(firebaseConfig);
+
+
+// Criação e configuração do Firebase Authenticator
 
 const provider = new GoogleAuthProvider();
 
@@ -22,10 +23,40 @@ provider.setCustomParameters({
     prompt: 'select_account'
 });
 
-export const EntrarGoogle = async () => {
-    const response = await signInWithPopup(auth, provider);
-    return response;
-};
-
 export const auth = getAuth();
+
+export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+
+
+
+export const db = getFirestore();
+
+export const createUserDocumentoFromAuth = async (userAuth) => {
+    if(!userAuth) return;
+
+    const userDocRef = doc(db, 'users', userAuth.uid);
+    const userSnapshot = await getDoc(userDocRef);
+
+    // se o usuário não existir
+    if(!userSnapshot.exists()) {
+        const { displayName, email } = userAuth;
+        const createdAt = new Date();
+
+        try{
+            await setDoc(userDocRef, {
+                displayName,
+                email,
+                createdAt
+            });
+        }catch (error) {
+            console.log('erro criando o usuário', error);
+        };
+
+        return userDocRef;
+    };
+
+    console.log(userDocRef);
+}
+
+
 
