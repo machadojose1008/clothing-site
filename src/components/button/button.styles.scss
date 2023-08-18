@@ -9,12 +9,14 @@
     background-color: black;
     color: white;
     text-transform: uppercase;
-    font-family: 'Open Sans Condensed';
+    font-family: 'Open Sans';
     font-weight: bolder;
     border: none;
+    border-radius: 20px;
     cursor: pointer;
     display: flex;
     justify-content: center;
+    transition: background-color 0.5s ease;
   
     &:hover {
       background-color: white;
@@ -23,11 +25,11 @@
     }
   
     &.google-sign-in {
-      background-color: #4285f4;
+      background-color: #db4a39;
       color: white;
   
       &:hover {
-        background-color: #357ae8;
+        background-color: #c53727;
         border: none;
       }
     }
