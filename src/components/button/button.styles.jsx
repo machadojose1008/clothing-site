@@ -1,4 +1,6 @@
-.button-container {
+import { styled } from "styled-components";
+
+export const BaseButton = styled.button`
     min-width: 165px;
     width: auto;
     height: 50px;
@@ -17,14 +19,15 @@
     display: flex;
     justify-content: center;
     transition: background-color 0.5s ease;
-  
+
     &:hover {
       background-color: white;
       color: black;
       border: 1px solid black;
     }
-  
-    &.google-sign-in {
+`;
+
+export const GoogleSignInButton = styled(BaseButton)`
       background-color: #db4a39;
       color: white;
   
@@ -32,9 +35,9 @@
         background-color: #c53727;
         border: none;
       }
-    }
-  
-    &.inverted {
+`;
+
+export const InvertedButton = styled(BaseButton)`
       background-color: white;
       color: black;
       border: 1px solid black;
@@ -44,6 +47,6 @@
         color: white;
         border: none;
       }
-    }
-  }
-  
+`;
+
+
