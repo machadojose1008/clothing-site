@@ -7,11 +7,11 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
 } from 'firebase/auth'
-import { getFirestore, doc, getDoc, setDoc, collection, writeBatch } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc, collection, writeBatch, query, getDocs } from 'firebase/firestore'
 
-
+/* Configuração do firebase */
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -44,6 +44,8 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider)
 export const db = getFirestore();
 
 export const addCollectionAndDocuments = async (collectionKey, objectsToAdd, field) => {
+    /* Função utilizada para transferir os dados do json para o banco de dados do firestore
+    Só deve rodar uma vez para fazer a transferência dos dados e depois retirada. */
     const collectionRef = collection(db, collectionKey);
     const batch = writeBatch(db);
 
@@ -57,7 +59,25 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd, fie
     console.log('done');
 }
 
+export const getCategoriesAndDocuments = async () => {
+     /* Busca no banco de dados no campo 'categories' e retorna os dados como um objeto com cada categoria 
+    e os dados dentro da categoria */
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+
+    const querySnapshot = await getDocs(q);
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+        const { title, items } = docSnapshot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    }, {});
+
+    return categoryMap;
+}
+
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
+    /* AO usuário fazer o login se o documento users não tiver um campo para aquele usuário 
+    esse campo vai ser criado com uma chave unica para o usuário. */
     if (!userAuth) return;
 
     const userDocRef = doc(db, 'users', userAuth.uid);
@@ -84,6 +104,8 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 
 }
 
+
+/* Funções auxiliares do firebase auth */
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
     if (!email || !password) return;
