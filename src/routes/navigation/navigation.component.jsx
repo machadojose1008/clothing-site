@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import { Fragment, useContext } from "react";
 import { ReactComponent as SneakerLogo } from '../../assets/sneaker.svg'
-import './navigation.styles.scss';
+import { NavigationContainer, NavLink, NaviLinks, LogoContainer } from "./navigation.styles";
 
 
 import { UserContext } from '../../contexts/user.context'
@@ -19,36 +19,38 @@ const NavigationBar = () => {
 
     return (
         <Fragment>
-            <div className="navigation">
-                <Link className="logo-container" to='/'>
+            <NavigationContainer>
+                <LogoContainer to='/'>
                     <SneakerLogo className='logo' />
-                </Link>
+                </LogoContainer>
 
-                <div className="nav-links-container">
-                    <Link className="nav-link" to='/shop'>
+                <NaviLinks>
+                    <NavLink to='/shop'>
                         LOJA
-                    </Link>
+                    </NavLink>
                     {
                         currentUser ? (
-                            <span className="nav-link" onClick={signOutUser}> 
+                            <NavLink as='span' onClick={signOutUser}>
                                 {' '}
                                 SAIR {' '}
-                            </span>
+                            </NavLink>
 
                         ) : (
-                            <Link className="nav-link" to='/auth'>
+                            <NavLink to='/auth'>
                                 ENTRAR
-                            </Link>
+                            </NavLink>
                         )
 
                     }
                     <CartIcon />
 
-                </div>
+                </NaviLinks>
                 {isCartOpen && <CartDropdown />}
-            </div>
+
+
+            </NavigationContainer>
             <Outlet />
-        </Fragment>
+        </Fragment >
     )
 
 };
