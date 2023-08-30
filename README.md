@@ -2,6 +2,9 @@
 
 Projeto desenvolvido com o curso Complete React Developer 2023 da Zero to Mastery
 
+# Acesse agora 
+
+https://snkrstore.netlify.app
 
 ## Objetivo
 
